@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <imago2.h>
 
-
 int main(int argc, char **argv)
 {
     if (argc < 2)
@@ -15,20 +14,22 @@ int main(int argc, char **argv)
 
     for (int i = 1; i < argc; i++)
     {
-        if (img_load(img, argv[i]) == -1)
+        const char *fname = (char *)argv[i];
+
+        if (img_load(img, fname) == -1)
         {
-            fprintf("img-format: cannot load \"%s\"", argv[i]);
+            fprintf(stderr, "img-format: cannot load \"%s\"", fname);
             continue;
         }
-        
+
         char *type;
         int bits;
         char *alpha;
 
-        if (img_is_float(img))
-            printf("\"%s\": %s,")
-        
+        // if (img_is_float(img))
+        //     printf("\"%s\": %s,");
     }
 
+    img_free(img);
     return EXIT_SUCCESS;
 }

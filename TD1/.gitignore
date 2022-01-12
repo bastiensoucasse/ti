@@ -1,7 +1,2 @@
 .vscode
-src/img-comp
-src/img-convert
-src/img-decomp
-src/img-format
-src/img-gummira
-src/img-rotchan
+build
