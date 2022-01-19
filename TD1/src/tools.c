@@ -3,12 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define NULLPXL 0
+
 const char *channel_extract(const char *pixels, const size_t size, const unsigned int channel_number)
 {
-    char *mono = (char *)malloc(size * sizeof(char));
+    char *mono = (char *)malloc(3 * size * sizeof(char));
 
     for (unsigned int i = 0; i < size; i++)
-        *(mono + i) = *(pixels + 3 * i + channel_number);
+    {
+        *(mono + 3 * i) = NULLPXL, *(mono + 3 * i + 1) = NULLPXL, *(mono + 3 * i + 2) = NULLPXL;
+        *(mono + 3 * i + channel_number) = *(pixels + 3 * i + channel_number);
+    }
 
     return mono;
 }
@@ -18,7 +23,7 @@ const char *channel_compose(const char *r_chan, const char *g_chan, const char *
     char *rgb = (char *)malloc(3 * size * sizeof(char));
 
     for (unsigned int i = 0; i < size; i++)
-        *(rgb + 3 * i) = *(r_chan + i), *(rgb + 3 * i + 1) = *(g_chan + i), *(rgb + 3 * i + 2) = *(b_chan + i);
+        *(rgb + 3 * i) = *(r_chan + 3 * i), *(rgb + 3 * i + 1) = *(g_chan + 3 * i + 1), *(rgb + 3 * i + 2) = *(b_chan + 3 * i + 2);
 
     return rgb;
 }
