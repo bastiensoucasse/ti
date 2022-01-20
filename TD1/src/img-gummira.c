@@ -31,8 +31,8 @@ int main(int argc, char **argv)
     img_set_pixels(img, w, w, FMT, pix);
 
     float x[n], y[n];
-    float mx = x_0, my = y_0;
-    x[0] = x_0; y[0] = y_0;
+    x[0] = x_0, y[0] = y_0;
+    float mx = fabs(x_0), my = fabs(y_0);
     for (int i = 0; i < n-1; i++)
     {
         x[i+1] = b * y[i] + f(x[i], a);
@@ -54,13 +54,19 @@ int main(int argc, char **argv)
         rgba[2] = alpha * alpha * 255;
         rgba[3] = rgba[2];
 
-        img_setpixel(img, x[i], y[i], rgba);
+        const unsigned int px = (w/2) * (tx+1);
+        const unsigned int py = (w/2) * (ty+1);
+
+        // const unsigned int px = (w/2) * (x[i]/mx+1);
+        // const unsigned int py = (w/2) * (y[i]/my+1);
+
+        img_setpixel(img, px, py, rgba);
     }
 
     img_save(img, argv[7]);
 
-    img_free(img);
+    img_free(img), free(pix);
     return EXIT_SUCCESS;
 }
 
-// ./build/img-gummira 81000 -.5355 1 1 1 80000 output/img-gummira/test.jpeg
+// Test: ./input/img-gummira-tests/mk-gummira-imgs.sh build/img-gummira 1000 1000000 output/img-gummira/test
