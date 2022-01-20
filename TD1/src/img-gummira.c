@@ -5,7 +5,7 @@
 
 #define FMT IMG_FMT_RGBA32
 
-int f(int x, int a)
+float f(float x, float a)
 {
     return a*x + (2*(1-a)*x*x) / (1+x*x);
 }
@@ -18,41 +18,37 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    printf("yo\n");
     struct img_pixmap *img = img_create();
 
-    printf("salut\n");
-    int w = atoi(argv[1]);
-    int a = atoi(argv[2]);
-    int b = atoi(argv[3]);
-    int x_0 = atoi(argv[4]);
-    int y_0 = atoi(argv[5]);
-    int n = atoi(argv[6]);
+    unsigned int w = atoi(argv[1]);
+    float a = atof(argv[2]);
+    float b = atof(argv[3]);
+    float x_0 = atof(argv[4]);
+    float y_0 = atof(argv[5]);
+    unsigned int n = atoi(argv[6]);
 
-    printf("ca va ?\n");
-    unsigned char pix[4*w];
+    unsigned char *pix = (unsigned char *)malloc(4 * w * w * sizeof(unsigned char));
+    img_set_pixels(img, w, w, FMT, pix);
 
-    printf("ouais\n");
-    int x[n], y[n];
-    int mx = x_0, my = y_0;
+    float x[n], y[n];
+    float mx = x_0, my = y_0;
+    x[0] = x_0; y[0] = y_0;
     for (int i = 0; i < n-1; i++)
     {
-        // printf("hey\n");
         x[i+1] = b * y[i] + f(x[i], a);
-        y[i] = -x[i] + f(x[i+1], a);
+        y[i+1] = -x[i] + f(x[i+1], a);
 
-        mx = x[i+1] > mx ? x[i+1] : mx;
-        my = y[i+1]> my ? y[i+1] : my;
+        mx = fabs(x[i+1]) > mx ? fabs(x[i+1]) : mx;
+        my = fabs(y[i+1])> my ? fabs(y[i+1]) : my;
     }
 
-    int M = mx > my ? mx : my;
-    int alpha;
+    float M = mx > my ? mx : my;
+    float alpha;
     unsigned char rgba[4] = {255, 0, 0, 0};
     for (int i = 0; i < n; i++)
     {
-        printf("hey encore\n");
-        int tx = x[i]/M, ty = y[i]/M;
-        alpha = 1 - (1/sqrt(2)) * sqrt(tx*tx + ty*ty);
+        float tx = x[i]/M, ty = y[i]/M;
+        alpha = 1.f - (1.f/sqrt(2.f)) * sqrt(tx*tx + ty*ty);
 
         rgba[1] = alpha * 255;
         rgba[2] = alpha * alpha * 255;
@@ -61,13 +57,10 @@ int main(int argc, char **argv)
         img_setpixel(img, x[i], y[i], rgba);
     }
 
-    img_set_pixels(img, w, w, FMT, pix);
     img_save(img, argv[7]);
-
-    printf("coucou\n");
 
     img_free(img);
     return EXIT_SUCCESS;
 }
 
-// ./build/img-gummira 81000 -5355 1 1 1 80000 output/img-gummira/test.jpeg
+// ./build/img-gummira 81000 -.5355 1 1 1 80000 output/img-gummira/test.jpeg
