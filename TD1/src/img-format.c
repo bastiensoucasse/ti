@@ -5,10 +5,7 @@
 int main(int argc, char **argv)
 {
     if (argc < 2)
-    {
-        fprintf(stderr, "Usage: img-format INPUT_IMAGE...\n");
-        exit(EXIT_FAILURE);
-    }
+        fprintf(stderr, "Usage: img-format INPUT_IMAGE...\n"), exit(EXIT_FAILURE);
 
     struct img_pixmap *img = img_create();
 

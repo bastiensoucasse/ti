@@ -7,17 +7,12 @@
 int main(int argc, char **argv)
 {
     if (argc != 3)
-    {
-        fprintf(stderr, "Usage: img-rotchan INPUT_IMAGE OUTPUT_IMAGE\n");
-        exit(EXIT_FAILURE);
-    }
+        fprintf(stderr, "Usage: img-rotchan INPUT_IMAGE OUTPUT_IMAGE\n"), exit(EXIT_FAILURE);
 
     int x_size, y_size;
     unsigned char *pix = img_load_pixels(argv[1], &x_size, &y_size, FMT);
-    if (!pix) {
-        fprintf(stderr, "img-rotchan: cannot load %s\n", argv[1]);
-        exit(EXIT_FAILURE);
-    }
+    if (!pix)
+        fprintf(stderr, "img-rotchan: cannot load %s\n", argv[1]), exit(EXIT_FAILURE);
 
     int img_size = x_size * y_size;
     // unsigned char tmp;

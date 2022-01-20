@@ -13,10 +13,7 @@ float f(float x, float a)
 int main(int argc, char **argv)
 {
     if (argc != 8)
-    {
-        fprintf(stderr, "Usage: img-gummira WIDTH A B X_0 Y_0 N OUTPUT_IMAGE\n");
-        exit(EXIT_FAILURE);
-    }
+        fprintf(stderr, "Usage: img-gummira WIDTH A B X_0 Y_0 N OUTPUT_IMAGE\n"), exit(EXIT_FAILURE);
 
     struct img_pixmap *img = img_create();
 
@@ -28,7 +25,8 @@ int main(int argc, char **argv)
     unsigned int n = atoi(argv[6]);
 
     unsigned char *pix = (unsigned char *)malloc(4 * w * w * sizeof(unsigned char));
-    img_set_pixels(img, w, w, FMT, pix);
+    if (img_set_pixels(img, w, w, FMT, pix) == -1)
+        exit(EXIT_FAILURE);
 
     float x[n], y[n];
     x[0] = x_0, y[0] = y_0;
@@ -57,15 +55,13 @@ int main(int argc, char **argv)
         const unsigned int px = (w/2) * (tx+1);
         const unsigned int py = (w/2) * (ty+1);
 
-        // const unsigned int px = (w/2) * (x[i]/mx+1);
-        // const unsigned int py = (w/2) * (y[i]/my+1);
-
         img_setpixel(img, px, py, rgba);
     }
 
     img_save(img, argv[7]);
+    free(pix);
 
-    img_free(img), free(pix);
+    img_free(img);
     return EXIT_SUCCESS;
 }
 
