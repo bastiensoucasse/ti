@@ -1,0 +1,67 @@
+#!/bin/sh
+
+DISP_SED_COMMAND=dispsed
+
+usage()
+{
+    cat >/dev/tty <<EOF
+Usage: $(basename $0) -D65 | -A | -n | -K TEMP 
+EOF
+    exit 1
+}
+
+draw_gmcc()
+{
+    INPUT_DATA=$1
+    OUTPUT_IMAGE=$2
+    
+    TMP=tmp_macbeth_$$
+    NUMBER=1
+    while read R G B
+    do
+	TMP_FILE=$(printf "${TMP}_%02d.png" $NUMBER)
+	drawrect $R $G $B -o $TMP_FILE -w 100 -h 100 -m 6
+	let NUMBER=NUMBER+1
+    done < $INPUT_DATA
+    
+    convert +append ${TMP}_01.png ${TMP}_02.png ${TMP}_03.png ${TMP}_04.png ${TMP}_05.png ${TMP}_06.png ${TMP}_L1.png
+    convert +append ${TMP}_07.png ${TMP}_08.png ${TMP}_09.png ${TMP}_10.png ${TMP}_11.png ${TMP}_12.png ${TMP}_L2.png
+    convert +append ${TMP}_13.png ${TMP}_14.png ${TMP}_15.png ${TMP}_16.png ${TMP}_17.png ${TMP}_18.png ${TMP}_L3.png
+    convert +append ${TMP}_19.png ${TMP}_20.png ${TMP}_21.png ${TMP}_22.png ${TMP}_23.png ${TMP}_24.png ${TMP}_L4.png
+    
+    convert -append ${TMP}_L1.png ${TMP}_L2.png ${TMP}_L3.png ${TMP}_L4.png $OUTPUT_IMAGE
+    
+    rm ${TMP}*.png
+}
+
+if [ ! -x $DISP_SED_COMMAND ]
+then
+    echo This script need the program $DISP_SED_COMMAND. Please meke it before.
+    exit 1
+fi
+
+case "$1" in
+    -n | -D65 | -A )
+	ARG=$1
+	OUTPUT=macbeth-checker$1.png
+	;;
+
+    -K )
+	ARG="$1 $2"
+	OUTPUT=macbeth-checker-K-$2.png
+	;;
+
+    * )
+	usage
+	;;
+esac
+
+TMPFILE=tmp_macbeth_$$.dat
+$DISP_SED_COMMAND -gmcc $ARG > $TMPFILE
+draw_gmcc $TMPFILE $OUTPUT
+rm $TMPFILE
+
+echo "Result in \"$OUTPUT\""
+display $OUTPUT
+
+

@@ -1,0 +1,159 @@
+#!/bin/sh
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+# See the GNU General Public License for more details (www.gnu.org/licenses)
+#
+# Copyright (C) 2018 Achille Braquelaire
+
+ARGV0=$(basename $0)
+
+WIDTH=256
+HEIGHT=256
+MARGIN=0
+OUTPUT=default.png
+DISPLAY_MODE=0
+
+RED=127
+GREEN=127
+BLUE=127
+BG_COL="rgb(0,0,0)"
+
+usage()
+{
+    cat >/dev/tty <<EOF
+Usage: $ARGV0 OPTIONS [RED GREEN BLUE]
+
+    Make an image of colored rectangle of RGB color RED GREEN BLUE (default grey).
+    Options: 
+	-m MARGIN : margin width (default $MARGIN)
+        -bg  RED GREEN BLUE : margin color (default black)
+        -w WIDTH : change width (default: ${WIDTH})
+        -h HEIGHT : change height (default: ${HEIGHT})
+
+        -o  OUTPUT_FILE : output file with valid image siffix (default: $OUTPUT)
+	-d : the imaga is displayed
+        --stdin : RED GREEN and BLUE component of rectangle color are red on stdin
+
+Usage: $ARGV0 --helph
+
+    Get this message.
+EOF
+    exit 1
+}
+
+do_it()
+{
+    RED=$1
+    GREEN=$2
+    BLUE=$3
+    FG_COL="rgb(${RED},${GREEN},${BLUE})"
+
+    if [ $MARGIN = 0 ]
+    then
+	(( X_0 = 0 ))
+	(( Y_0 = 0 ))
+	(( X_1 = WIDTH - 1 ))
+	(( Y_1 = HEIGHT - 1 ))
+    else
+	
+	(( X_0 = MARGIN ))
+	(( Y_0 = MARGIN ))
+	(( X_1 = WIDTH - 1 - MARGIN ))
+	(( Y_1 = HEIGHT - 1 - MARGIN ))
+    fi
+    
+    convert \
+	-size ${WIDTH}x${HEIGHT} \
+	xc:"$BG_COL" \
+	-fill "$FG_COL" \
+	-draw "rectangle ${X_0},${Y_0},${X_1},${Y_1}"\
+	$OUTPUT
+}
+
+if ! which convert >/dev/null 2>/dev/null
+then
+    cat >/dev/tty <<EOF
+It seems that convert command line is not currently installed.
+Please install ImageMagic package to use $ARGV0.
+EOF
+    exit 1
+fi
+
+#[ $# = 0 ] && usage
+
+while :
+do
+    case "$1" in
+	--help )
+	    usage
+	    ;;
+	
+	"")
+	    break
+	    ;;
+
+	[0-9]* )
+	    [ $# -ge 3 ] || usage
+	    RED=$1
+	    GREEN=$2
+	    BLUE=$3
+	    shift 3
+	    ;;
+
+	-w )
+	    [ $# -ge 2 ] || usage
+	    WIDTH=$2
+	    shift 2
+	    ;;
+
+	-m )
+	    [ $# -ge 2 ] || usage
+	    MARGIN=$2
+	    shift 2
+	    ;;
+
+	-h )
+	    [ $# -ge 2 ] || usage
+	    HEIGHT=$2
+	    shift 2
+	    ;;
+
+	-bg )
+	    [ $# -ge 4 ] || usage
+	    BG_COL="rgb($2,$3,$4)"
+	    shift 4
+	    ;;
+
+	--stdin )
+	    read RED GREEN BLUE
+	    shift
+	    ;;
+
+	-o )
+	    [ $# -ge 2 ] || usage
+	    OUTPUT=$2
+	    shift 2
+	    ;;
+
+	-d )
+	    DISPLAY_MODE=1
+	    shift
+	    ;;
+	
+	* )
+	    usage
+	    ;;
+    esac
+done
+
+do_it $RED $GREEN $BLUE
+if [ $DISPLAY_MODE = 1 ]
+then
+    trap "rm -f $OUTPUT" 0 2 3 15
+    display $OUTPUT
+fi
+
+

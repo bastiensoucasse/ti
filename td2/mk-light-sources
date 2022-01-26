@@ -1,0 +1,20 @@
+#!/bin/sh
+
+RESULT=bb_sources.png
+
+dispsed -K 2000  | drawrect --stdin -o bb_2000.png -w 80 -m 1
+dispsed -K 3000  | drawrect --stdin -o bb_3000.png -w 80 -m 1
+dispsed -K 4000  | drawrect --stdin -o bb_4000.png -w 80 -m 1
+dispsed -K 5000  | drawrect --stdin -o bb_5000.png -w 80 -m 1
+dispsed -K 6000  | drawrect --stdin -o bb_6000.png -w 80 -m 1
+dispsed -K 7000  | drawrect --stdin -o bb_7000.png -w 80 -m 1
+dispsed -K 8000  | drawrect --stdin -o bb_8000.png -w 80 -m 1
+dispsed -K 9000  | drawrect --stdin -o bb_9000.png -w 80 -m 1
+dispsed -K 10000 | drawrect --stdin -o bb_10000.png -w 80 -m 1
+
+convert +append bb_2000.png bb_3000.png bb_4000.png bb_5000.png bb_6000.png bb_7000.png bb_8000.png bb_9000.png bb_10000.png $RESULT
+
+rm bb_2000.png bb_3000.png bb_4000.png bb_5000.png bb_6000.png bb_7000.png bb_8000.png bb_9000.png bb_10000.png 
+
+echo "Result in \"$RESULT\""
+display $RESULT
