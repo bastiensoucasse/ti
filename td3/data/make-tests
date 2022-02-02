@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Activité 1
+test-glfip-1 mandrill.png activite-1-resultat-sans-z.png
+test-glfip-1 -z mandrill.png activite-1-resultat-avec-z.png
+
+# Activité 2
+test-glfip-2 mandrill.png activite-2-resultat-sans-c.png 
+test-glfip-2 -c mandrill.png activite-2-resultat-avec-c.png 
+
+# Activité 3
+test-glfip-3 mandrill.png activite-3-resultat.png activite-3-as.png activite-3-ps.png
+
+# Activité 4
+test-glfip-4 mandrill.png activite-4_0-30-0.png 0 30 0
+test-glfip-4 mandrill.png activite-4_0-30-1.png 0 30 1
+test-glfip-4 mandrill.png activite-4_0-5-0.png 0 5 0 
+test-glfip-4 mandrill.png activite-4_30-80-1.png 30 80 1
+
+# Activité 5
+test-rgbfip-4 napoli.png activite-5_0-5-0.png 0 5 0 
+test-rgbfip-4 napoli.png activite-5_1-20-1.png 1 20 1
+test-rgbfip-4 napoli.png activite-5_20-100-1.png 20 100 1
