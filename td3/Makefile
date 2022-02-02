@@ -1,18 +1,28 @@
-CFLAGS := -std=c99 -g -Wall -I/opt/homebrew/include -I.
-LDFLAGS := -limago -lpng -ljpeg -lfftw3 -lm
+CFLAGS  := -g -I$(HOMEBREW_PATH)/include -Iinclude -O3 -Wall
+LDFLAGS := -limago -ljpeg -lpng -lfftw3 -lm
+
+OUTDIR = build
+SRCDIR = src
 
 .PHONY: all
-all: test-glfip-1
+all: test-glfip-1 # test-glfip-2 # test-glfip-3 # test-glfip-4
 
-test-glfip-1: test-glfip-1.o fft.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+.PHONY: test-glfip-1 test-glfip-2 test-glfip-3 test-glfip-4
+test-glfip-1: $(OUTDIR)/test-glfip-1
+test-glfip-2: $(OUTDIR)/test-glfip-2
+test-glfip-3: $(OUTDIR)/test-glfip-3
+test-glfip-4: $(OUTDIR)/test-glfip-4
 
-fft.o: src/fft.c
-	$(CC) $(CFLAGS) -o $@ -c $^
+$(OUTDIR)/%: $(OUTDIR)/%.o $(OUTDIR)/fft.o
+	$(CC) $(LDFLAGS) -o $@ $^
 
-test-glfip-1.o: src/test-glfip-1.c
-	$(CC) $(CFLAGS) -o $@ -c $^
+$(OUTDIR)/%.o: $(SRCDIR)/%.c outdir
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+.PHONY: outdir
+outdir:
+	@mkdir -p $(OUTDIR)
 
 .PHONY: clean
 clean:
-	$(RM) *.o *~
+	$(RM) -r $(OUTDIR)
