@@ -1,4 +1,5 @@
-CFLAGS  := -g -I$(HOMEBREW_PATH)/include -Iinclude -O3 -Wall
+CC := gcc
+CFLAGS := -std=c99 -g -I$(HOMEBREW_PATH)/include -Iinclude -O3 -Wall
 LDFLAGS := -limago -ljpeg -lpng -lfftw3 -lm
 
 OUTDIR = build
