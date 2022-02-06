@@ -1,12 +1,11 @@
+#include <complex.h>
+#include <fftw3.h>
+#include <imago2.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <complex.h>
-#include <fftw3.h>
-#include <imago2.h>
 
 #include "fft.h"
 #include "fip.h"
@@ -31,6 +30,7 @@ img_pixmap_read(char* file_name)
         fprintf(stderr, "Cannot load \"%s\" image\n", file_name);
         exit(EXIT_FAILURE);
     }
+
     if (img_is_float(img) || img_has_alpha(img) || !img_is_greyscale(img)) {
         fprintf(stderr, "Sorry, only grey levels 8 bits images\n");
         exit(EXIT_FAILURE);
@@ -74,8 +74,7 @@ int main(int argc, char* argv[])
     int width = img->width;
     int height = img->height;
 
-    unsigned char* result = process_channel((unsigned char*)img->pixels, width, height,
-        min, max, mode);
+    unsigned char* result = process_channel((unsigned char*)img->pixels, width, height, min, max, mode);
 
     memcpy(img->pixels, result, width * height * img->pixelsz);
     img_save(img, output_file);
@@ -83,5 +82,5 @@ int main(int argc, char* argv[])
     free(result);
     img_free(img);
 
-    exit(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }

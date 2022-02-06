@@ -12,8 +12,7 @@
 static void
 usage(char* s)
 {
-    fprintf(stderr,
-        "Usage: %s [-z] INPUT OUTPUT\n", s);
+    fprintf(stderr, "Usage: %s [-z] INPUT OUTPUT\n", s);
     exit(EXIT_FAILURE);
 }
 
@@ -26,6 +25,7 @@ img_pixmap_read(char* file_name)
         fprintf(stderr, "Cannot load \"%s\" image\n", file_name);
         exit(EXIT_FAILURE);
     }
+
     if (img_is_float(img) || img_has_alpha(img) || !img_is_greyscale(img)) {
         fprintf(stderr, "Sorry, only grey levels 8 bits images\n");
         exit(EXIT_FAILURE);
@@ -63,7 +63,7 @@ process_channel(unsigned char* channel, int width, int height, bool clear_zero)
     return result;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
     bool clear_zero = false;
     char* input_file;
@@ -94,5 +94,5 @@ int main(int argc, char* argv[])
     free(result);
     img_free(img);
 
-    exit(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
