@@ -46,7 +46,7 @@ fft_forward(unsigned char* chan, int width, int height)
     fftw_execute(plan);
 
     fftw_destroy_plan(plan);
-    fftw_free(in);
+    // fftw_free(in);
     return out;
 }
 
