@@ -4,18 +4,24 @@ Iantsa Provost & Bastien Soucasse – TI
 
 Pour compiler :
 
-```sh
+```
 make
 ```
 
 Pour nettoyer :
 
-```sh
+```
 make clean
+```
+
+Pour nettoyer et supprimer les rendus :
+
+```
+make reset
 ```
 
 Pour tester :
 
-```sh
+```
 make test
 ```

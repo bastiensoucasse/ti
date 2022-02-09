@@ -44,9 +44,8 @@ void fip_as_cut(double* spectrum, int width, int height, int min, int max, int m
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             double u = j - width / 2.;
-            double v = -i - height / 2.;
+            double v = i - height / 2.;
             double freq = sqrt(pow(u, 2) + pow(v, 2));
-            // printf("freq = %lf\n", freq);
 
             if (mode == 1)
                 spectrum[i * width + j] = min <= freq && freq <= max ? 0. : spectrum[i * width + j];
