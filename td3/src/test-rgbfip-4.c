@@ -32,11 +32,6 @@ img_pixmap_read(char* file_name)
         exit(EXIT_FAILURE);
     }
 
-    if (img_is_float(img) || img_has_alpha(img) || !img_is_greyscale(img)) {
-        fprintf(stderr, "Sorry, only grey levels 8 bits images\n");
-        exit(EXIT_FAILURE);
-    }
-
     return img;
 }
 
@@ -75,18 +70,23 @@ int main(int argc, char* argv[])
     int width = img->width;
     int height = img->height;
 
+    unsigned char num_channels = img_has_alpha(img) ? 4 : 3;
+
     unsigned char* results[3];
-    for (unsigned char channel = 0; channel < 3; channel++) {
-        unsigned char *input = channel_extract(img->pixels, width * height, channel);
+    for (unsigned char channel = 0; channel < num_channels; channel++) {
+        unsigned char* input = channel_extract(img->pixels, width * height, channel);
         results[channel] = process_channel(input, width, height, min, max, mode);
+        free(input);
     }
 
-    unsigned char *result = channel_compose(results[0], results[1], results[2], width * height);
+    unsigned char* result = channel_compose(results[0], results[1], results[2], width * height);
     memcpy(img->pixels, result, width * height * img->pixelsz);
     img_save(img, output_file);
 
-    free(result);
     img_free(img);
+    free(result);
+    for (unsigned char channel = 0; channel < num_channels; channel++)
+        free(results[channel]);
 
     return EXIT_SUCCESS;
 }

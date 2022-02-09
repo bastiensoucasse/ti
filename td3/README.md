@@ -2,6 +2,20 @@ Iantsa Provost & Bastien Soucasse – TI
 
 # TD 3
 
+Pour compiler :
+
 ```sh
-./build/test-glfip-1 data/mandrill.png renderings/mandrill.png
+make
+```
+
+Pour nettoyer :
+
+```sh
+make clean
+```
+
+Pour tester :
+
+```sh
+make test
 ```

@@ -44,14 +44,14 @@ conv_complex_to_uchar(fftw_complex* c_channel, int width, int height)
 fftw_complex*
 fft_forward(unsigned char* chan, int width, int height)
 {
-    fftw_complex* out = (fftw_complex*)fftw_malloc(width * height * sizeof(fftw_complex));
     fftw_complex* in = conv_uchar_to_complex(chan, width, height);
+    fftw_complex* out = (fftw_complex*)fftw_malloc(width * height * sizeof(fftw_complex));
     fftw_plan plan = fftw_plan_dft_2d(height, width, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
 
     fftw_execute(plan);
 
     fftw_destroy_plan(plan);
-    // fftw_free(in);
+    fftw_free(in);
     return out;
 }
 
@@ -65,7 +65,7 @@ fft_backward(fftw_complex* fr_chan, int width, int height)
     unsigned char* channel = conv_complex_to_uchar(out, width, height);
 
     fftw_destroy_plan(plan);
-    // fftw_free(out);
+    fftw_free(out);
     return channel;
 }
 

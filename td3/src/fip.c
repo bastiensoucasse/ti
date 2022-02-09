@@ -28,20 +28,30 @@ void fip_save_image_spectrum(double* spectrum, int width, int height, char* name
         if (tmp[i] > 255)
             tmp[i] = 255;
     }
-    
+
     for (unsigned int i = 0; i < width * height; i++)
-        pixels[i] = (unsigned char) tmp[i];
+        pixels[i] = (unsigned char)tmp[i];
 
     img_set_pixels(img, width, height, IMG_FMT_GREY8, pixels);
     img_save(img, name);
+
+    img_destroy(img);
+    free(pixels);
 }
 
 void fip_as_cut(double* spectrum, int width, int height, int min, int max, int mode)
 {
-    for (int i = 0; i < width * height; i++) {
-        if (mode == 1)
-            spectrum[i] = min <= spectrum[i] && spectrum[i] <= max ? 0. : spectrum[i];
-        else
-            spectrum[i] = spectrum[i] < min || max < spectrum[i] ? 0. : spectrum[i];
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            double u = j - width / 2.;
+            double v = -i - height / 2.;
+            double freq = sqrt(pow(u, 2) + pow(v, 2));
+            // printf("freq = %lf\n", freq);
+
+            if (mode == 1)
+                spectrum[i * width + j] = min <= freq && freq <= max ? 0. : spectrum[i * width + j];
+            else
+                spectrum[i * width + j] = freq < min || max < freq ? 0. : spectrum[i * width + j];
+        }
     }
 }

@@ -13,7 +13,6 @@ static void
 usage(char* s)
 {
     fprintf(stderr, "Usage: %s [-z] INPUT OUTPUT\n", s);
-    exit(EXIT_FAILURE);
 }
 
 static struct img_pixmap*
@@ -78,9 +77,9 @@ int main(int argc, char** argv)
             input_file = argv[2];
             output_file = argv[3];
         } else
-            usage(argv[0]);
+            usage(argv[0]), exit(EXIT_FAILURE);
     } else
-        usage(argv[0]);
+        usage(argv[0]), exit(EXIT_FAILURE);
 
     struct img_pixmap* img = img_pixmap_read(input_file);
     int width = img->width;
