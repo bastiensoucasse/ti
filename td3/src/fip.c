@@ -6,6 +6,8 @@
 
 void fip_save_image_spectrum(double* spectrum, int width, int height, char* name, bool phase)
 {
+    double tmp[width * height];
+
     struct img_pixmap* img = img_create();
     unsigned char* pixels = (unsigned char*)malloc(width * height * sizeof(unsigned char));
 
@@ -16,19 +18,19 @@ void fip_save_image_spectrum(double* spectrum, int width, int height, char* name
 
     for (unsigned int i = 0; i < width * height; i++) {
         if (phase)
-            spectrum[i] = 255 * pow(((spectrum[i] / max) + 1) / 2, .15);
+            tmp[i] = 255 * pow(((spectrum[i] / max) + 1) / 2, .15);
         else
-            spectrum[i] = 255 * pow(spectrum[i] / max, .15);
+            tmp[i] = 255 * pow(spectrum[i] / max, .15);
 
         // Thresholding
-        if (spectrum[i] < 0)
-            spectrum[i] = 0;
-        if (spectrum[i] > 255)
-            spectrum[i] = 255;
+        if (tmp[i] < 0)
+            tmp[i] = 0;
+        if (tmp[i] > 255)
+            tmp[i] = 255;
     }
     
     for (unsigned int i = 0; i < width * height; i++)
-        pixels[i] = (unsigned char) spectrum[i];
+        pixels[i] = (unsigned char) tmp[i];
 
     img_set_pixels(img, width, height, IMG_FMT_GREY8, pixels);
     img_save(img, name);
@@ -36,21 +38,10 @@ void fip_save_image_spectrum(double* spectrum, int width, int height, char* name
 
 void fip_as_cut(double* spectrum, int width, int height, int min, int max, int mode)
 {
-    // if (mode == 1)
-    //     for (int i = min; i <= max; i++)
-    //         spectrum[i] = 0;
-    // else
-    // {
-    //     for (int i = 0; i < min; i++)
-    //         spectrum[i] = 0;
-    //     for (int i = max+1; i < width * height; i++)
-    //         spectrum[i] = 0;
-    // }
-
     for (int i = 0; i < width * height; i++) {
         if (mode == 1)
-            spectrum[i] = min <= i && i <= max ? 0 : spectrum[i];
+            spectrum[i] = min <= spectrum[i] && spectrum[i] <= max ? 0. : spectrum[i];
         else
-            spectrum[i] = i < min || max < i ? 0 : spectrum[i];
+            spectrum[i] = spectrum[i] < min || max < spectrum[i] ? 0. : spectrum[i];
     }
 }

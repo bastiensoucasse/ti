@@ -6,14 +6,14 @@
 static fftw_complex*
 conv_uchar_to_complex(unsigned char* channel, int width, int height)
 {
-    fftw_complex* c_channel = (fftw_complex*)fftw_malloc(width * height * sizeof(double));
+    fftw_complex* c_channel = (fftw_complex*)fftw_malloc(width * height * sizeof(fftw_complex));
 
     // Centering and normalizing
     char sign;
-    for (int y = 0; y < height; y++)
-        for (int x = 0; x < width; x++) {
-            sign = (x + y) % 2 == 0 ? 1 : -1;
-            c_channel[x * width + y] = sign * (double)channel[x * width + y] / (width * height);
+    for (int i = 0; i < height; i++)
+        for (int j = 0; j < width; j++) {
+            sign = (i + j) % 2 == 0 ? 1 : -1;
+            c_channel[i * width + j] = sign * (double)channel[i * width + j] / (width * height);
         }
 
     return c_channel;
@@ -26,16 +26,16 @@ conv_complex_to_uchar(fftw_complex* c_channel, int width, int height)
 
     // Decentering
     char sign;
-    for (int y = 0; y < height; y++)
-        for (int x = 0; x < width; x++) {
-            sign = (x + y) % 2 == 0 ? 1 : -1;
+    for (int i = 0; i < height; i++)
+        for (int j = 0; j < width; j++) {
+            sign = (i + j) % 2 == 0 ? 1 : -1;
             // Thresholding
-            int value = sign * creal(c_channel[x * width + y]);
+            int value = sign * creal(c_channel[i * width + j]);
             if (value < 0)
                 value = 0;
             if (value > 255)
                 value = 255;
-            channel[x * width + y] = value;
+            channel[i * width + j] = value;
         }
 
     return channel;
@@ -44,7 +44,7 @@ conv_complex_to_uchar(fftw_complex* c_channel, int width, int height)
 fftw_complex*
 fft_forward(unsigned char* chan, int width, int height)
 {
-    fftw_complex* out = (fftw_complex*)fftw_malloc(width * height * sizeof(double));
+    fftw_complex* out = (fftw_complex*)fftw_malloc(width * height * sizeof(fftw_complex));
     fftw_complex* in = conv_uchar_to_complex(chan, width, height);
     fftw_plan plan = fftw_plan_dft_2d(height, width, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
 
@@ -58,7 +58,7 @@ fft_forward(unsigned char* chan, int width, int height)
 unsigned char*
 fft_backward(fftw_complex* fr_chan, int width, int height)
 {
-    fftw_complex* out = (fftw_complex*)fftw_malloc(width * height * sizeof(double));
+    fftw_complex* out = (fftw_complex*)fftw_malloc(width * height * sizeof(fftw_complex));
     fftw_plan plan = fftw_plan_dft_2d(height, width, fr_chan, out, FFTW_BACKWARD, FFTW_ESTIMATE);
 
     fftw_execute(plan);
