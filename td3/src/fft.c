@@ -29,7 +29,10 @@ conv_complex_to_uchar(fftw_complex* c_channel, int width, int height)
     for (int y = 0; y < height; y++)
         for (int x = 0; x < width; x++) {
             sign = (x + y) % 2 == 0 ? 1 : -1;
-            channel[x * width + y] = sign * c_channel[x * width + y];
+            int value = sign * creal(c_channel[x * width + y]);
+            if (value < 0) value = 0;
+            if (value > 255) value = 255;
+            channel[x * width + y] = value;
         }
 
     return channel;
