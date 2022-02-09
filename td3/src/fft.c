@@ -29,9 +29,12 @@ conv_complex_to_uchar(fftw_complex* c_channel, int width, int height)
     for (int y = 0; y < height; y++)
         for (int x = 0; x < width; x++) {
             sign = (x + y) % 2 == 0 ? 1 : -1;
+            // Thresholding
             int value = sign * creal(c_channel[x * width + y]);
-            if (value < 0) value = 0;
-            if (value > 255) value = 255;
+            if (value < 0)
+                value = 0;
+            if (value > 255)
+                value = 255;
             channel[x * width + y] = value;
         }
 
@@ -87,7 +90,7 @@ fft_extract_ps(fftw_complex* fr_chan, int width, int height)
 fftw_complex*
 fft_compose_aps(double* as, double* ps, int width, int height)
 {
-    fftw_complex* fr_chan = (fftw_complex*)fftw_malloc(width * height * sizeof(double));
+    fftw_complex* fr_chan = (fftw_complex*)fftw_malloc(width * height * sizeof(fftw_complex));
     for (int i = 0; i < width * height; i++)
         fr_chan[i] = as[i] * cos(ps[i]) + as[i] * sin(ps[i]) * I;
     return fr_chan;
