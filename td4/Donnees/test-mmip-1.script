@@ -1,0 +1,18 @@
+#!/bin/sh
+
+f1()
+{
+    set -x
+    test-mmip-1 -e $1 $2.png $2-e-$1.png
+    test-mmip-1 -d $1 $2.png $2-d-$1.png
+    test-mmip-1 -o $1 $2.png $2-o-$1.png
+    test-mmip-1 -c $1 $2.png $2-c-$1.png
+    set +x
+}
+
+f1 2 ag1
+f1 5 ag1
+f1 3 ag3
+
+
+
