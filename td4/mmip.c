@@ -11,8 +11,6 @@
 
 #include "strelm.h"
 
-#include "MISSING_CODE.h"
-
 static unsigned char*
 L_diff(unsigned char* i1, unsigned char* i2, int size)
 {
