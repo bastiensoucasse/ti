@@ -8,6 +8,7 @@ struct bbox {
     int jmax;
 };
 
-extern struct bbox bbox_init(int width, int height, int i, int j, int half_width);
+extern struct bbox
+bbox_init(const int width, const int height, const int i, const int j, const int half_width);
 
 #endif // BBOX_H

@@ -11,7 +11,7 @@ static void
 usage(const char* const s)
 {
     fprintf(stderr,
-        "Usage: %s IMAGE.\n"
+        "Usage: %s I J HALF-WIDTH IMAGE.\n"
         "    Compute and display statistical features.\n",
         s);
     exit(EXIT_FAILURE);
@@ -27,10 +27,14 @@ int main(const int argc, const char* const* const argv)
     const int width = img->width;
     const int height = img->height;
 
-    const float mean = stif_mean(channel, width * height);
-    const int median = stif_median(channel, width * height);
-    const float standard_deviation = sqrt(stif_variance(channel, width * height));
-    const float entropy = stif_entropy(channel, width * height);
+    const int i = atoi(argv[1]);
+    const int j = atoi(argv[2]);
+    const int half_width = atoi(argv[3]);
+
+    const float mean = stif_lmean(channel, width, height, i, j, half_width);
+    const int median = stif_lmedian(channel, width, height, i, j, half_width);
+    const float standard_deviation = sqrt(stif_lvariance(channel, width, height, i, j, half_width));
+    const float entropy = stif_lentropy(channel, width, height, i, j, half_width);
 
     printf("Mean: %5.1f (%5.3f).\n"
            "Median: %5d (%5.3f).\n"

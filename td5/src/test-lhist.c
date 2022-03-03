@@ -11,7 +11,7 @@ static void
 usage(const char* const s)
 {
     fprintf(stderr,
-        "Usage: %s [-n] [-c] IMAGE.\n"
+        "Usage: %s [-n] [-c] I J HALF-WIDTH IMAGE.\n"
         "    Compute and display standard histogram of IMAGE.\n"
         "        -n: Compute normalized histogram.\n"
         "        -c: Compute cumulate histogram.\n",
@@ -45,7 +45,11 @@ int main(const int argc, const char* const* const argv)
     const int width = img->width;
     const int height = img->height;
 
-    float* histogram = histogram_make(channel, width * height);
+    const int i = atoi(argv[iargc - 3]);
+    const int j = atoi(argv[iargc - 2]);
+    const int half_width = atoi(argv[iargc - 1]);
+
+    float* histogram = histogram_make_local(channel, width, height, i, j, half_width);
 
     if (normalized)
         histogram_normalize(histogram);
