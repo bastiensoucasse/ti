@@ -1,6 +1,7 @@
 #include "threshold.h"
 
-#include <stdlib.h>
+#include <math.h>
+#include <string.h>
 #include <string.h>
 
 #include "histogram.h"
@@ -12,11 +13,11 @@ threshold_std(const unsigned char* const channel, const int size, const unsigned
     unsigned char* const out = NULL;
     memcpy(out, channel, size);
 
-    float* const histogram = histogram_make(channel, size);
-    histogram_normalize(histogram);
-    histogram_cumulate(histogram);
-
-    // …
+    for (int i = 0; i < size; i++)
+        if (channel[i] < th)
+            out[i] = 0;
+        else
+            out[i] = 1;
 
     return out;
 }
@@ -24,19 +25,15 @@ threshold_std(const unsigned char* const channel, const int size, const unsigned
 unsigned char*
 threshold_mean(const unsigned char* const channel, const int size)
 {
-    unsigned char* const out = NULL;
-    memcpy(out, channel, size);
-
-    return out;
+    const float mean = stif_mean(channel, size);
+    return threshold_std(channel, size, (unsigned char)round(mean));
 }
 
 unsigned char*
 threshold_median(const unsigned char* const channel, const int size)
 {
-    unsigned char* const out = NULL;
-    memcpy(out, channel, size);
-
-    return out;
+    const int median = stif_median(channel, size);
+    return threshold_std(channel, size, (unsigned char)median);
 }
 
 unsigned char*
@@ -44,6 +41,14 @@ threshold_lmean(const unsigned char* const channel, const int width, const int h
 {
     unsigned char* const out = NULL;
     memcpy(out, channel, width * height);
+
+    for (int i = 0; i < height; i++)
+        for (int j = 0; j < width; j++) {
+            if (channel[i] < stif_lmean(channel, width, height, i, j, half_width))
+                out[i] = 0;
+            else
+                out[i] = 1;
+        }
 
     return out;
 }
@@ -53,6 +58,8 @@ threshold_percent(const unsigned char* const channel, const int size, const floa
 {
     unsigned char* const out = NULL;
     memcpy(out, channel, size);
+
+    // TODO…
 
     return out;
 }
