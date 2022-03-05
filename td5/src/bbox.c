@@ -3,7 +3,7 @@
 #include <assert.h>
 
 static int
-L_clamp(int v, const int min, const int max)
+L_clamp(int v, int min, int max)
 {
     if (v < min)
         v = min;
@@ -13,14 +13,14 @@ L_clamp(int v, const int min, const int max)
 }
 
 struct bbox
-bbox_init(const int width, const int height, const int i, const int j, const int half_width)
+bbox_init(int width, int height, int i, int j, int half_width)
 {
     assert(half_width >= 0);
 
-    const int i_min = L_clamp(i - half_width, 0, height - 1);
-    const int i_max = L_clamp(i + half_width, 0, height - 1);
-    const int j_min = L_clamp(j - half_width, 0, width - 1);
-    const int j_max = L_clamp(j + half_width, 0, width - 1);
+    int i_min = L_clamp(i - half_width, 0, height - 1);
+    int i_max = L_clamp(i + half_width, 0, height - 1);
+    int j_min = L_clamp(j - half_width, 0, width - 1);
+    int j_max = L_clamp(j + half_width, 0, width - 1);
 
     return (struct bbox) { i_min, i_max, j_min, j_max };
 }

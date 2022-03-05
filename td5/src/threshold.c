@@ -1,65 +1,63 @@
 #include "threshold.h"
 
 #include <math.h>
-#include <string.h>
-#include <string.h>
+#include <stdlib.h>
 
 #include "histogram.h"
 #include "stif.h"
 
 unsigned char*
-threshold_std(const unsigned char* const channel, const int size, const unsigned char th)
+threshold_std(unsigned char* channel, int size, unsigned char th)
 {
-    unsigned char* const out = NULL;
-    memcpy(out, channel, size);
-
-    for (int i = 0; i < size; i++)
-        if (channel[i] < th)
-            out[i] = 0;
+    for (int p = 0; p < size; p++)
+        if (channel[p] < th)
+            channel[p] = 0;
         else
-            out[i] = 1;
-
-    return out;
+            channel[p] = HISTOGRAM_NLEV - 1;
+    return channel;
 }
 
 unsigned char*
-threshold_mean(const unsigned char* const channel, const int size)
+threshold_mean(unsigned char* channel, int size)
 {
-    const float mean = stif_mean(channel, size);
+    float mean = stif_mean(channel, size);
     return threshold_std(channel, size, (unsigned char)round(mean));
 }
 
 unsigned char*
-threshold_median(const unsigned char* const channel, const int size)
+threshold_median(unsigned char* channel, int size)
 {
-    const int median = stif_median(channel, size);
+    int median = stif_median(channel, size);
     return threshold_std(channel, size, (unsigned char)median);
 }
 
 unsigned char*
-threshold_lmean(const unsigned char* const channel, const int width, const int height, const int half_width)
+threshold_lmean(unsigned char* channel, int width, int height, int half_width)
 {
-    unsigned char* const out = NULL;
-    memcpy(out, channel, width * height);
-
     for (int i = 0; i < height; i++)
         for (int j = 0; j < width; j++) {
-            if (channel[i] < stif_lmean(channel, width, height, i, j, half_width))
-                out[i] = 0;
+            if (channel[i * width + j] < stif_lmean(channel, width, height, i, j, half_width))
+                channel[i * width + j] = 0;
             else
-                out[i] = 1;
+                channel[i * width + j] = HISTOGRAM_NLEV - 1;
         }
-
-    return out;
+    return channel;
 }
 
 unsigned char*
-threshold_percent(const unsigned char* const channel, const int size, const float percent)
+threshold_percent(unsigned char* channel, int size, float percent)
 {
-    unsigned char* const out = NULL;
-    memcpy(out, channel, size);
+    float* histogram = histogram_make(channel, size);
+    histogram_normalize(histogram);
+    histogram_cumulate(histogram);
 
-    // TODO…
+    int th = -1;
+    for (int i = 0; i < HISTOGRAM_NLEV; i++)
+        if (histogram[i] > percent / 100) {
+            th = i;
+            break;
+        }
 
-    return out;
+    free(histogram);
+    return threshold_std(channel, size, (unsigned char)th);
 }

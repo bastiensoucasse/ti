@@ -1,0 +1,5 @@
+# stats-a
+
+Mean: 134.
+Standard Deviation: 92.3.
+Entropy: 4.8.

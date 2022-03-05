@@ -10,7 +10,7 @@
 #include "threshold.h"
 
 static void
-usage(const char* const s)
+usage(char* s)
 {
     fprintf(stderr,
         "Usage: %s THR IMAGE RESULT.\n"
@@ -27,7 +27,7 @@ usage(const char* const s)
     exit(EXIT_FAILURE);
 }
 
-int main(const int argc, const char* const* const argv)
+int main(int argc, char** argv)
 {
     enum Mode {
         Standard,
@@ -82,11 +82,11 @@ int main(const int argc, const char* const* const argv)
     }
 
     struct img_pixmap* img = img_load_image(argv[iargc]);
-    const char* const output_filename = argv[iargc + 1];
+    char* output_filename = argv[iargc + 1];
 
-    const unsigned char* const channel = (unsigned char*)img->pixels;
-    const int width = img->width;
-    const int height = img->height;
+    unsigned char* channel = (unsigned char*)img->pixels;
+    int width = img->width;
+    int height = img->height;
 
     unsigned char* result = NULL;
 

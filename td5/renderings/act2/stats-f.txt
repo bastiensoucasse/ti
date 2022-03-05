@@ -1,0 +1,6 @@
+# stats-f
+
+Mean: 129 (0.507).
+Median: 122 (0.478).
+Standard Deviation: 61.6 (0.242).
+Entropy: 7.4.

@@ -1,86 +1,81 @@
 #include "histogram.h"
 
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "bbox.h"
 
-float*
-histogram_make(const unsigned char* const channel, const int size)
+static float*
+histogram_create()
 {
-    float* histogram = (float*)malloc(HISTOGRAM_NLEV * sizeof(float));
-    if (!histogram) {
+    float* hist = (float*)malloc(HISTOGRAM_NLEV * sizeof(float));
+    if (!hist) {
         fprintf(stderr, "Not enough memory.\n");
         exit(EXIT_FAILURE);
     }
+    return hist;
+}
 
+static void
+histogram_init(float* hist)
+{
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        histogram[i] = 0.f;
+        hist[i] = 0.f;
+}
 
-    for (int i = 0; i < size; i++)
-        histogram[channel[i]]++;
-
-    float n = 0;
+static float
+get_size_from_histogram(float* hist)
+{
+    float size = 0.f;
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        n += histogram[i];
-    assert(n == size);
-
-    return histogram;
+        size += hist[i];
+    return size;
 }
 
 float*
-histogram_make_local(const unsigned char* const channel, const int width, const int height, const int i, const int j, const int half_width)
+histogram_make(unsigned char* channel, int size)
 {
-    float* histogram = (float*)malloc(HISTOGRAM_NLEV * sizeof(float));
-    if (!histogram) {
-        fprintf(stderr, "Not enough memory.\n");
-        exit(EXIT_FAILURE);
-    }
+    float* hist = histogram_create();
+    histogram_init(hist);
 
-    for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        histogram[i] = 0.f;
+    for (int p = 0; p < size; p++)
+        hist[channel[p]]++;
 
-    const struct bbox bbox = bbox_init(width, height, i, j, half_width);
-    for (int i = bbox.imin; i < bbox.imax; i++)
-        for (int j = bbox.jmin; j < bbox.jmax; j++)
-            histogram[channel[i * width + j]]++;
-
-    return histogram;
+    return hist;
 }
 
 float*
-histogram_tdup(const float* const histogram)
+histogram_make_local(unsigned char* channel, int width, int height, int i, int j, int half_width)
 {
-    float* dup = (float*)malloc(HISTOGRAM_NLEV * sizeof(float));
-    if (!histogram) {
-        fprintf(stderr, "Not enough memory.\n");
-        exit(EXIT_FAILURE);
-    }
+    float* hist = histogram_create();
+    histogram_init(hist);
 
+    struct bbox box = bbox_init(width, height, i, j, half_width);
+    for (int pi = box.imin; pi < box.imax; pi++)
+        for (int pj = box.jmin; pj < box.jmax; pj++)
+            hist[channel[pi * width + pj]]++;
+
+    return hist;
+}
+
+float*
+histogram_tdup(float* hist)
+{
+    float* dup = histogram_create();
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        dup[i] = histogram[i];
-
+        dup[i] = hist[i];
     return dup;
 }
 
-void histogram_cumulate(float* const histogram)
+void histogram_cumulate(float* hist)
 {
     for (int i = 1; i < HISTOGRAM_NLEV; i++)
-        histogram[i] += histogram[i - 1];
+        hist[i] += hist[i - 1];
 }
 
-void histogram_normalize(float* const histogram)
+void histogram_normalize(float* hist)
 {
-    int size = 0;
+    float size = get_size_from_histogram(hist);
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        size += histogram[i];
-
-    for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        histogram[i] /= size;
-
-    float n = 0;
-    for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        n += histogram[i];
-    assert(n == 1.);
+        hist[i] /= size;
 }

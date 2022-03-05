@@ -8,7 +8,7 @@
 #include "img.h"
 
 static void
-usage(const char* const s)
+usage(char* s)
 {
     fprintf(stderr,
         "Usage: %s [-n] [-c] I J HALF-WIDTH IMAGE.\n"
@@ -19,7 +19,7 @@ usage(const char* const s)
     exit(EXIT_FAILURE);
 }
 
-int main(const int argc, const char* const* const argv)
+int main(int argc, char** argv)
 {
     bool normalized = false;
     bool cumulutated = false;
@@ -41,13 +41,13 @@ int main(const int argc, const char* const* const argv)
         usage(argv[0]);
 
     struct img_pixmap* img = img_load_image(argv[iargc]);
-    const unsigned char* const channel = (unsigned char*)img->pixels;
-    const int width = img->width;
-    const int height = img->height;
+    unsigned char* channel = (unsigned char*)img->pixels;
+    int width = img->width;
+    int height = img->height;
 
-    const int i = atoi(argv[iargc - 3]);
-    const int j = atoi(argv[iargc - 2]);
-    const int half_width = atoi(argv[iargc - 1]);
+    int i = atoi(argv[iargc - 3]);
+    int j = atoi(argv[iargc - 2]);
+    int half_width = atoi(argv[iargc - 1]);
 
     float* histogram = histogram_make_local(channel, width, height, i, j, half_width);
 

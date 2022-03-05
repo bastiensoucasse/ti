@@ -4,6 +4,6 @@
 #include <imago2.h>
 
 extern struct img_pixmap*
-img_load_image(const char* const filename);
+img_load_image(char* file_name);
 
 #endif // IMG_H

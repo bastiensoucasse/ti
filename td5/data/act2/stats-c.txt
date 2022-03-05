@@ -1,0 +1,5 @@
+# stats-c
+
+Mean: 206.
+Standard Deviation: 32.9.
+Entropy: 5.4.

@@ -1,0 +1,5 @@
+# stats-b
+
+Mean: 55.
+Standard Deviation: 23.9.
+Entropy: 5.7.
