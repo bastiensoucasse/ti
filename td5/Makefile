@@ -8,7 +8,7 @@ SRCDIR := src
 DATADIR := images
 
 .PHONY: all
-all: test-hist test-lhist test-stif test-lstif test-threshold al-blur # al-thresh # al-enhance # lms-img
+all: test-hist test-lhist test-stif test-lstif test-threshold al-blur al-thresh al-enhance # lms-img
 
 .PHONY: test-hist
 test-hist: $(BUILDDIR)/test-hist

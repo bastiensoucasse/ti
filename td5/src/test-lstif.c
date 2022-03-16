@@ -19,10 +19,10 @@ usage(char* s)
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    if (argc != 5)
         usage(argv[0]);
 
-    struct img_pixmap* img = img_load_image(argv[1]);
+    struct img_pixmap* img = img_load_image(argv[4]);
     unsigned char* channel = (unsigned char*)img->pixels;
     int width = img->width;
     int height = img->height;
