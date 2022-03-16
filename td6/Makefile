@@ -8,43 +8,21 @@ SRCDIR := src
 DATADIR := images
 
 .PHONY: all
-all: test-hist test-lhist test-stif test-lstif test-threshold al-blur # al-thresh # al-enhance # lms-img
+all: test-1 test-2 # test-3 # test-4 # test-5 # test-6
 
-.PHONY: test-hist
-test-hist: $(BUILDDIR)/test-hist
-$(BUILDDIR)/test-hist: $(BUILDDIR)/test-hist.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: test-lhist
-test-lhist: $(BUILDDIR)/test-lhist
-$(BUILDDIR)/test-lhist: $(BUILDDIR)/test-lhist.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: test-stif
-test-stif: $(BUILDDIR)/test-stif
-$(BUILDDIR)/test-stif: $(BUILDDIR)/test-stif.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: test-lstif
-test-lstif: $(BUILDDIR)/test-lstif
-$(BUILDDIR)/test-lstif: $(BUILDDIR)/test-lstif.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: test-threshold
-test-threshold: $(BUILDDIR)/test-threshold
-$(BUILDDIR)/test-threshold: $(BUILDDIR)/test-threshold.o $(BUILDDIR)/threshold.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: al-blur
-al-blur: $(BUILDDIR)/al-blur
-$(BUILDDIR)/al-blur: $(BUILDDIR)/al-blur.o $(BUILDDIR)/threshold.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: al-thresh
-al-thresh: $(BUILDDIR)/al-thresh
-$(BUILDDIR)/al-thresh: $(BUILDDIR)/al-thresh.o $(BUILDDIR)/threshold.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: al-enhance
-al-enhance: $(BUILDDIR)/al-enhance
-$(BUILDDIR)/al-enhance: $(BUILDDIR)/al-enhance.o $(BUILDDIR)/threshold.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
-
-.PHONY: lms-img
-lms-img: $(BUILDDIR)/lms-img
-$(BUILDDIR)/lms-img: $(BUILDDIR)/lms-img.o $(BUILDDIR)/threshold.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o $(BUILDDIR)/bbox.o $(BUILDDIR)/img.o
+.PHONY: test-1 test-2 test-3 test-4 test-5 test-6
+test-1: $(BUILDDIR)/test-1
+$(BUILDDIR)/test-1: $(BUILDDIR)/test-1.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/img.o
+test-2: $(BUILDDIR)/test-2
+$(BUILDDIR)/test-2: $(BUILDDIR)/test-2.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o
+test-3: $(BUILDDIR)/test-3
+$(BUILDDIR)/test-3: $(BUILDDIR)/test-3.o $(BUILDDIR)/img.o
+test-4: $(BUILDDIR)/test-4
+$(BUILDDIR)/test-4: $(BUILDDIR)/test-4.o $(BUILDDIR)/img.o
+test-5: $(BUILDDIR)/test-5
+$(BUILDDIR)/test-5: $(BUILDDIR)/test-5.o $(BUILDDIR)/img.o
+test-6: $(BUILDDIR)/test-6
+$(BUILDDIR)/test-6: $(BUILDDIR)/test-6.o $(BUILDDIR)/img.o
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c $(BUILDDIR)
 	$(CC) $(CFLAGS) -o $@ -c $<
