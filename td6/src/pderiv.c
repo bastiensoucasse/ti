@@ -1,4 +1,5 @@
 #include "pderiv.h"
+#include "deriche.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,19 +10,6 @@ static float kernel[3] = { 0.0, -1.0, 1.0 };
 static float kernel_deriv[3] = { -1.0, 0.0, 1.0 };
 static float kernel_smooth1[3] = { 1.0, 1.0, 1.0 };
 static float kernel_smooth2[3] = { 1.0, 2.0, 1.0 };
-
-// static float*
-// truc(float k1[3], float k2[3])
-// {
-//     float *k = (float *)malloc(sizeof(float) * 9);
-//     for (int i = 0; i < 3; i++)
-//         for (int j = 0; j < 3; j++)
-//             k[i * 3 + j] = k1[i] * k2[j];
-
-//     for (int i = 0; i < 9; i++)
-//         printf("%f\n", k[i]);
-//     return k;
-// }
 
 float*
 pderiv_d2_dj(float* channel, int width, int height)
@@ -120,13 +108,34 @@ pderiv_sobel_di(float* channel, int width, int height)
 }
 
 float*
-pderiv_deriche_di(float* channel, int width, int height, float alpha)
-{
-    // TODO
-}
-
-float*
 pderiv_deriche_dj(float* channel, int width, int height, float alpha)
 {
     // TODO
+    float* deriv = deriche_apply_d(channel, width, height, alpha);
+    float* deriv_inv = convol1d_swap_ij(deriv, width, height);
+    float* smooth = deriche_apply_s(deriv_inv, width, height, alpha);
+    float* smooth_inv = convol1d_swap_ij(smooth, width, height);
+    free(deriv);
+    free(deriv_inv);
+    free(smooth);
+    return smooth_inv;
+}
+
+float*
+pderiv_deriche_di(float* channel, int width, int height, float alpha)
+{
+    // TODO
+    // Lissage horizontal
+    float* ch_1 = deriche_apply_s(channel, width, height, alpha);
+
+    // Dérivation verticale
+    float* ch_2 = convol1d_swap_ij(ch_1, width, height);
+    float* ch_3 = deriche_apply_d(ch_2, width, height, alpha);
+    float* result = convol1d_swap_ij(ch_3, height, width);
+
+    free(ch_1);
+    free(ch_2);
+    free(ch_3);
+
+    return result;
 }

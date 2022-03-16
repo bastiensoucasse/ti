@@ -5,18 +5,16 @@ LDFLAGS := -L$(HOMEBREW_PATH)/lib -limago -ljpeg -lpng -lfftw3 -lm
 BUILDDIR := build
 SRCDIR := src
 
-DATADIR := images
-
 .PHONY: all
-all: test-1 test-2 # test-3 # test-4 # test-5 # test-6
+all: test-1 test-2 test-3 # test-4 # test-5 # test-6
 
 .PHONY: test-1 test-2 test-3 test-4 test-5 test-6
 test-1: $(BUILDDIR)/test-1
 $(BUILDDIR)/test-1: $(BUILDDIR)/test-1.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/img.o
 test-2: $(BUILDDIR)/test-2
-$(BUILDDIR)/test-2: $(BUILDDIR)/test-2.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o
+$(BUILDDIR)/test-2: $(BUILDDIR)/test-2.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o $(BUILDDIR)/deriche.o
 test-3: $(BUILDDIR)/test-3
-$(BUILDDIR)/test-3: $(BUILDDIR)/test-3.o $(BUILDDIR)/img.o
+$(BUILDDIR)/test-3: $(BUILDDIR)/test-3.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o $(BUILDDIR)/deriche.o
 test-4: $(BUILDDIR)/test-4
 $(BUILDDIR)/test-4: $(BUILDDIR)/test-4.o $(BUILDDIR)/img.o
 test-5: $(BUILDDIR)/test-5
