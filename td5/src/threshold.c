@@ -1,20 +1,30 @@
 #include "threshold.h"
 
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "histogram.h"
 #include "stif.h"
 
+static unsigned char*
+channel_malloc(int size)
+{
+    unsigned char* channel = (unsigned char*)malloc(size * sizeof(unsigned char));
+    if (!channel) {
+        fprintf(stderr, "Not enough memory.\n");
+        exit(EXIT_FAILURE);
+    }
+    return channel;
+}
+
 unsigned char*
 threshold_std(unsigned char* channel, int size, unsigned char th)
 {
+    unsigned char* new_channel = channel_malloc(size);
     for (int p = 0; p < size; p++)
-        if (channel[p] < th)
-            channel[p] = 0;
-        else
-            channel[p] = HISTOGRAM_NLEV - 1;
-    return channel;
+        new_channel[p] = channel[p] < th ? 0 : HISTOGRAM_NLEV - 1;
+    return new_channel;
 }
 
 unsigned char*
@@ -34,15 +44,13 @@ threshold_median(unsigned char* channel, int size)
 unsigned char*
 threshold_lmean(unsigned char* channel, int width, int height, int half_width)
 {
+    unsigned char* new_channel = channel_malloc(width * height);
     for (int i = 0; i < height; i++)
         for (int j = 0; j < width; j++) {
             unsigned char th = (unsigned char)stif_lmean(channel, width, height, i, j, half_width);
-            if (channel[i * width + j] < th)
-                channel[i * width + j] = 0;
-            else
-                channel[i * width + j] = HISTOGRAM_NLEV - 1;
+            new_channel[i * width + j] = channel[i * width + j] < th ? 0 : HISTOGRAM_NLEV - 1;
         }
-    return channel;
+    return new_channel;
 }
 
 unsigned char*

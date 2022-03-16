@@ -10,7 +10,7 @@ mean(float* hist)
 {
     histogram_normalize(hist);
 
-    float mean = 0.f;
+    float mean = 0;
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
         mean += hist[i] * i;
 
@@ -34,7 +34,7 @@ static int
 median(float* hist)
 {
     for (int i = 0; i < HISTOGRAM_NLEV; i++) {
-        float l = 0.f, r = 0.f;
+        float l = 0, r = 0;
         for (int j = 0; j <= i; j++)
             l += hist[j];
         for (int j = 0; j < HISTOGRAM_NLEV; j++)
@@ -66,7 +66,7 @@ variance(float* hist, float mean)
 {
     histogram_normalize(hist);
 
-    float variance = 0.f;
+    float variance = 0;
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
         variance += hist[i] * pow(i - mean, 2);
 
@@ -93,7 +93,7 @@ entropy(float* hist)
 {
     histogram_normalize(hist);
 
-    float entropy = 0.f;
+    float entropy = 0;
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
         if (hist[i] != 0)
             entropy -= hist[i] * log2(hist[i]);

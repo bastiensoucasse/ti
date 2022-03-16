@@ -20,13 +20,13 @@ static void
 histogram_init(float* hist)
 {
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
-        hist[i] = 0.f;
+        hist[i] = 0;
 }
 
 static float
 get_size_from_histogram(float* hist)
 {
-    float size = 0.f;
+    float size = 0;
     for (int i = 0; i < HISTOGRAM_NLEV; i++)
         size += hist[i];
     return size;
