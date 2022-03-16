@@ -34,11 +34,9 @@ threshold_median(unsigned char* channel, int size)
 unsigned char*
 threshold_lmean(unsigned char* channel, int width, int height, int half_width)
 {
-    /// TODO: Fix.
-
     for (int i = 0; i < height; i++)
         for (int j = 0; j < width; j++) {
-            unsigned char th = (unsigned char)round(stif_lmean(channel, width, height, i, j, half_width));
+            unsigned char th = (unsigned char)stif_lmean(channel, width, height, i, j, half_width);
             if (channel[i * width + j] < th)
                 channel[i * width + j] = 0;
             else
@@ -50,8 +48,6 @@ threshold_lmean(unsigned char* channel, int width, int height, int half_width)
 unsigned char*
 threshold_percent(unsigned char* channel, int size, float percent)
 {
-    /// TODO: Fix.
-
     float* histogram = histogram_make(channel, size);
     histogram_normalize(histogram);
     histogram_cumulate(histogram);

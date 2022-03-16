@@ -1,0 +1,46 @@
+#!/bin/zsh
+
+if [ -z "$1" ]
+    then
+        echo "Usage: $0 <image> [size]."
+        exit 1
+fi
+
+image=$1
+name="${image##*/}"
+name="${name%.*}"
+
+if [ ! -z "$2" ]
+    then
+        size=$2
+    else
+        size=5
+fi
+
+if [ ! -d output ]
+    then
+        mkdir output
+fi
+
+if [ ! -d output/$name ]
+    then
+        mkdir output/$name
+fi
+
+if [ ! -f output/$name/$name.png ]
+    then
+        if [ ! -f $image ]
+            then
+                echo "Image \"$image\" not found."
+                exit 1
+        fi
+
+        echo "Generating image \"$name.png\"…"
+        bin/img-convert $image output/$name/$name.png
+fi
+
+for type in d e c o
+    do
+        echo "Generating image \"$name-$type-$size.png\"…"
+        bin/img-gen -$type $size output/$name/$name.png output/$name/$name-$type-$size.png
+done

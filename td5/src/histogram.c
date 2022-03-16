@@ -51,9 +51,9 @@ histogram_make_local(unsigned char* channel, int width, int height, int i, int j
     histogram_init(hist);
 
     struct bbox box = bbox_init(width, height, i, j, half_width);
-    for (int pi = box.imin; pi <= box.imax; pi++)
-        for (int pj = box.jmin; pj <= box.jmax; pj++)
-            hist[channel[pi * width + pj]]++;
+    for (int i = box.imin; i <= box.imax; i++)
+        for (int j = box.jmin; j <= box.jmax; j++)
+            hist[channel[i * width + j]]++;
 
     return hist;
 }

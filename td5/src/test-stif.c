@@ -42,6 +42,5 @@ int main(int argc, char** argv)
         entropy);
 
     img_free(img);
-
     return EXIT_SUCCESS;
 }

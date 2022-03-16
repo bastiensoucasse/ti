@@ -14,7 +14,7 @@ usage(char* s)
 {
     fprintf(stderr,
         "Usage: %s THR IMAGE RESULT.\n"
-        "Usage: %s [-m | -med ] IMAGE RESULT.\n"
+        "Usage: %s [-m | -med] IMAGE RESULT.\n"
         "Usage: %s -lm HALF-WIDTH IMAGE RESULT.\n"
         "Usage: %s -p PERCENT IMAGE RESULT.\n"
         "    Compute image thresholding relative to threshold THR.\n"
@@ -81,8 +81,8 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
-    struct img_pixmap* img = img_load_image(argv[iargc]);
-    char* output_filename = argv[iargc + 1];
+    struct img_pixmap* img = img_load_image(argv[argc - 2]);
+    char* output_filename = argv[argc - 1];
 
     unsigned char* channel = (unsigned char*)img->pixels;
     int width = img->width;
@@ -112,6 +112,5 @@ int main(int argc, char** argv)
     img_save(img, output_filename);
 
     img_free(img);
-
     return EXIT_SUCCESS;
 }

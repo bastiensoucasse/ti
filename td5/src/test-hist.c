@@ -24,23 +24,18 @@ int main(int argc, char** argv)
     bool normalized = false;
     bool cumulutated = false;
 
-    int iargc = 1;
-    while (iargc < argc) {
-        if (strcmp(argv[iargc], "-c") == 0)
+    for (int i = 1; i < argc; i++)
+        if (strcmp(argv[i], "-c") == 0)
             cumulutated = true;
-        else if (strcmp(argv[iargc], "-n") == 0)
+        else if (strcmp(argv[i], "-n") == 0)
             normalized = true;
-        else if (argv[iargc][0] == '-')
+        else if (argv[i][0] == '-')
             usage(argv[0]);
-        else
-            break;
-        iargc++;
-    }
 
-    if (iargc != argc - 1)
+    if (argc < 2 || argc > 4)
         usage(argv[0]);
 
-    struct img_pixmap* img = img_load_image(argv[iargc]);
+    struct img_pixmap* img = img_load_image(argv[argc - 1]);
     unsigned char* channel = (unsigned char*)img->pixels;
     int width = img->width;
     int height = img->height;
@@ -58,6 +53,5 @@ int main(int argc, char** argv)
 
     free(histogram);
     img_free(img);
-
     return EXIT_SUCCESS;
 }

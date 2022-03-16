@@ -1,6 +1,7 @@
 #include "bbox.h"
 
 #include <assert.h>
+#include <stdio.h>
 
 static int
 L_clamp(int v, int min, int max)

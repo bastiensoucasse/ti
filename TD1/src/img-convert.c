@@ -10,6 +10,7 @@ int main(int argc, char **argv)
     struct img_pixmap *img = img_create();
 
     img_load(img, argv[1]);
+    img_convert(img, IMG_FMT_GREY8);
     img_save(img, argv[2]);
 
     img_free(img);
