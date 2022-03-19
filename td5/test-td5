@@ -29,7 +29,7 @@ if [ ! -d $OUTPUT_DIR/act2 ]; then
 fi
 
 for c in a b c d e f; do
-    $BUILD_DIR/test-stif data/act2/stats-$c.png > $OUTPUT_DIR/act2/stats-$c.png
+    $BUILD_DIR/test-stif data/act2/stats-$c.png > $OUTPUT_DIR/act2/stats-$c.txt
 done
 
 
@@ -64,5 +64,9 @@ $BUILD_DIR/al-blur 4 256 data/lac.png $OUTPUT_DIR/act5/lac-4-256.png
 
 $BUILD_DIR/al-thresh 4 0.5 data/txt1.png $OUTPUT_DIR/act5/txt1-ath-4-05.png
 $BUILD_DIR/al-thresh 16 0.9 data/txt1.png $OUTPUT_DIR/act5/txt1-ath-16-09.png
+
+$BUILD_DIR/al-thresh 16 0.2 data/txt2.png $OUTPUT_DIR/act5/txt2-ath-16-02.png
+$BUILD_DIR/al-thresh 16 0.8 data/txt2.png $OUTPUT_DIR/act5/txt2-ath-16-08.png
+$BUILD_DIR/al-thresh 24 0.7 data/txt2.png $OUTPUT_DIR/act5/txt2-ath-24-07.png
 
 $BUILD_DIR/al-enhance 8 64 data/toits.png $OUTPUT_DIR/act5/toits-8-64.png
