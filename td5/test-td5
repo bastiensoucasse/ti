@@ -1,0 +1,68 @@
+#!/bin/sh
+
+BUILD_DIR=build
+OUTPUT_DIR=output
+
+
+# Compiling
+
+make clean &> /dev/null
+make
+
+
+# Activity 1
+
+if [ ! -d $OUTPUT_DIR/act1 ]; then
+    mkdir -p $OUTPUT_DIR/act1
+fi
+
+$BUILD_DIR/test-hist data/quais.png > $OUTPUT_DIR/act1/quais.hist
+$BUILD_DIR/test-hist -n data/quais.png > $OUTPUT_DIR/act1/quais-n.hist
+$BUILD_DIR/test-hist -c data/quais.png > $OUTPUT_DIR/act1/quais-c.hist
+$BUILD_DIR/test-hist -n -c data/quais.png > $OUTPUT_DIR/act1/quais-n-c.hist
+
+
+# Activity 2
+
+if [ ! -d $OUTPUT_DIR/act2 ]; then
+    mkdir -p $OUTPUT_DIR/act2
+fi
+
+for c in a b c d e f; do
+    $BUILD_DIR/test-stif data/act2/stats-$c.png > $OUTPUT_DIR/act2/stats-$c.png
+done
+
+
+# Activity 4
+
+if [ ! -d $OUTPUT_DIR/act4 ]; then
+    mkdir -p $OUTPUT_DIR/act4
+fi
+
+$BUILD_DIR/test-threshold 127 data/quais.png $OUTPUT_DIR/act4/quais-th127.png
+$BUILD_DIR/test-threshold -m data/quais.png $OUTPUT_DIR/act4/quais-th-mean.png
+$BUILD_DIR/test-threshold -med data/quais.png $OUTPUT_DIR/act4/quais-th-med.png
+$BUILD_DIR/test-threshold -p 25 data/quais.png $OUTPUT_DIR/act4/quais-th-p25.png
+$BUILD_DIR/test-threshold -p 75 data/quais.png $OUTPUT_DIR/act4/quais-th-p75.png
+
+$BUILD_DIR/test-threshold -m data/txt1.png $OUTPUT_DIR/act4/txt1-th-mean.png
+$BUILD_DIR/test-threshold -lm 4 data/txt1.png $OUTPUT_DIR/act4/txt1-thlm-4.png
+$BUILD_DIR/test-threshold -lm 16 data/txt1.png $OUTPUT_DIR/act4/txt1-thlm-16.png
+
+$BUILD_DIR/test-threshold -m data/txt2.png $OUTPUT_DIR/act4/txt2-th-mean.png
+$BUILD_DIR/test-threshold -lm 16 data/txt2.png $OUTPUT_DIR/act4/txt2-thlm-16.png
+
+
+# Activity 5
+
+if [ ! -d $OUTPUT_DIR/act5 ]; then
+    mkdir -p $OUTPUT_DIR/act5
+fi
+
+$BUILD_DIR/al-blur 4 60 data/lac.png $OUTPUT_DIR/act5/lac-4-60.png
+$BUILD_DIR/al-blur 4 256 data/lac.png $OUTPUT_DIR/act5/lac-4-256.png
+
+$BUILD_DIR/al-thresh 4 0.5 data/txt1.png $OUTPUT_DIR/act5/txt1-ath-4-05.png
+$BUILD_DIR/al-thresh 16 0.9 data/txt1.png $OUTPUT_DIR/act5/txt1-ath-16-09.png
+
+$BUILD_DIR/al-enhance 8 64 data/toits.png $OUTPUT_DIR/act5/toits-8-64.png
