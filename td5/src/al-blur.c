@@ -40,7 +40,7 @@ int main(int argc, char** argv)
     int height = img->height;
 
     int half_width = atoi(argv[1]);
-    unsigned char T = atoi(argv[2]);
+    int T = atoi(argv[2]);
 
     unsigned char* result = channel_malloc(width * height);
     for (int i = 0; i < height; i++)
