@@ -106,10 +106,3 @@ deriche_apply_d(float *channel, int width, int height, float alpha)
 
     return result;
 }
-
-
-    
-
-
-
-  

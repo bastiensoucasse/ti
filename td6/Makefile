@@ -6,7 +6,7 @@ BUILDDIR := build
 SRCDIR := src
 
 .PHONY: all
-all: test-1 test-2 test-3 # test-4 # test-5 # test-6
+all: test-1 test-2 test-3 test-4 test-5 test-6
 
 .PHONY: test-1 test-2 test-3 test-4 test-5 test-6
 test-1: $(BUILDDIR)/test-1
@@ -16,11 +16,11 @@ $(BUILDDIR)/test-2: $(BUILDDIR)/test-2.o $(BUILDDIR)/channel.o $(BUILDDIR)/convo
 test-3: $(BUILDDIR)/test-3
 $(BUILDDIR)/test-3: $(BUILDDIR)/test-3.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o $(BUILDDIR)/deriche.o
 test-4: $(BUILDDIR)/test-4
-$(BUILDDIR)/test-4: $(BUILDDIR)/test-4.o $(BUILDDIR)/img.o
+$(BUILDDIR)/test-4: $(BUILDDIR)/test-4.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/gradient.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o $(BUILDDIR)/deriche.o
 test-5: $(BUILDDIR)/test-5
-$(BUILDDIR)/test-5: $(BUILDDIR)/test-5.o $(BUILDDIR)/img.o
+$(BUILDDIR)/test-5: $(BUILDDIR)/test-5.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/gradient.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o $(BUILDDIR)/deriche.o
 test-6: $(BUILDDIR)/test-6
-$(BUILDDIR)/test-6: $(BUILDDIR)/test-6.o $(BUILDDIR)/img.o
+$(BUILDDIR)/test-6: $(BUILDDIR)/test-6.o $(BUILDDIR)/channel.o $(BUILDDIR)/convol1d.o $(BUILDDIR)/gradient.o $(BUILDDIR)/hysteresis.o $(BUILDDIR)/img.o $(BUILDDIR)/pderiv.o $(BUILDDIR)/deriche.o  $(BUILDDIR)/threshold.o $(BUILDDIR)/stif.o $(BUILDDIR)/histogram.o
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c $(BUILDDIR)
 	$(CC) $(CFLAGS) -o $@ -c $<
